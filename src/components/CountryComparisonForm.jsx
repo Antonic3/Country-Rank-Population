@@ -72,7 +72,7 @@ export default function Compare() {
                 );
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Choose a country one" />
+                <TextField {...params} label="Choose a country 1" />
               )}
             />
             {country1 ? (
@@ -128,7 +128,7 @@ export default function Compare() {
                 );
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Choose a country two" />
+                <TextField {...params} label="Choose a country 2" />
               )}
             />
             {country2 ? (
