@@ -10,3 +10,7 @@ export const formatPopulation = (num) => {
   
     return num;
   };
+
+  export const formatArea = (n) => {
+    return n.toLocaleString("id-ID");
+  };

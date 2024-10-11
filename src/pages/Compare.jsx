@@ -1,15 +1,22 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import CountryCompareForm from '../components/CountryComparisonForm';
-import CountryCompareResult from '../components/CountryComparisonResult';
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import CompareResult from '../components/CountryComparisonResult';
 
-const Compare = () => {
+export default function CompareRes() {
+  const countries = useSelector((state) => state.country.data);
+  const { code1, code2 } = useParams();
+  const country1 = countries.find((country) => country.cca2 === code1);
+  const country2 = countries.find((country) => country.cca2 === code2);
+  const data = {
+    country1,
+    country2,
+  };
   return (
-    <Routes>
-      <Route path="/" element={<CountryCompareForm />} />
-      <Route path=":code1/n/:code2" element={<CountryCompareResult />} />
-    </Routes>
+    <section className="mt-10 text-center">
+      <div className="flex justify-center items-center">
+        <CompareResult data={data} />
+      </div>
+    </section>
   );
-};
-
-export default Compare;
+}

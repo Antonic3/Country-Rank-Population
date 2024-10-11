@@ -1,82 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { formatArea, formatPopulation } from "../utils";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-const CountryCompareResult = ({ code1, code2 }) => {
-  const [data, setData] = useState({});
+export default function CompareResult({ data }) {
+  const { country1, country2 } = data;
 
-  useEffect(() => {
-    if (code1 && code2) {
-      const fetchCountryData = async () => {
-        try {
-          const response = await axios.get(`${import.meta.env.VITE_COMPARE_API}/alpha/${code1}`);
-          const response2 = await axios.get(`${import.meta.env.VITE_COMPARE_API}/alpha/${code2}`);
-          setData({ country1: response.data, country2: response2.data });
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchCountryData();
-    }
-  }, [code1, code2]);
+  const head = {
+    fontFamily: "Poppins, sans-serif",
+    fontWeight: 700,
+  };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Perbandingan Negara</h1>
-      <div className="flex flex-wrap -mx-3 mb-4">
-        {data.country1 && data.country2 ? (
-          <>
-            <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
-              <h2 className="text-2xl font-bold mb-2">{data.country1.name?.common || 'Nama tidak tersedia'}</h2>
-              <img
-                src={`https://flagcdn.com/w80/${code1.toLowerCase()}.png`}
-                alt={code1}
-                className="w-20 h-20 mb-2"
-              />
-              <p className="text-gray-700 text-sm mb-2">Ibukota: {data.country1.capital?.[0] || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Luas Wilayah: {data.country1.area ? `${data.country1.area} km²` : 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Penduduk: {data.country1.population || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Region: {data.country1.region || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Subregion: {data.country1.subregion || 'Tidak tersedia'}</p>
-            </div>
-            <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
-              <h2 className="text-2xl font-bold mb-2">{data.country2.name?.common || 'Nama tidak tersedia'}</h2>
-              <img
-                src={`https://flagcdn.com/w80/${code2.toLowerCase()}.png`}
-                alt={code2}
-                className="w-20 h-20 mb-2"
-              />
-              <p className="text-gray-700 text-sm mb-2">Ibukota: {data.country2.capital?.[0] || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Luas Wilayah: {data.country2.area ? `${data.country2.area} km²` : 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Penduduk: {data.country2.population || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Region: {data.country2.region || 'Tidak tersedia'}</p>
-              <p className="text-gray-700 text-sm mb-2">Subregion: {data.country2.subregion || 'Tidak tersedia'}</p>
-            </div>
-          </>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
-      {data.country1 && data.country2 && (
-        <div className="flex flex-wrap -mx-3 mb-4">
-          <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
-            <h2 className="text-2xl font-bold mb-2">Perbandingan</h2>
-            <p className="text-gray-700 text-sm mb-2">
-              Luas Wilayah: {data.country1.area ? `${data.country1.area} km²` : 'Tidak tersedia'} vs {data.country2.area ? `${data.country2.area} km²` : 'Tidak tersedia'}
-            </p>
-            <p className="text-gray-700 text-sm mb-2">
-              Penduduk: {data.country1.population || 'Tidak tersedia'} vs {data.country2.population || 'Tidak tersedia'}
-            </p>
-            <p className="text-gray-700 text-sm mb-2">
-              Region: {data.country1.region || 'Tidak tersedia'} vs {data.country2.region || 'Tidak tersedia'}
-            </p>
-            <p className="text-gray-700 text-sm mb-2">
-              Subregion: {data.country1.subregion || 'Tidak tersedia'} vs {data.country2.subregion || 'Tidak tersedia'}
-            </p>
-          </div>
-        </div>
-      )}
-    </div>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell></TableCell>
+            <TableCell sx={head}>
+              <div className="flex gap-5">
+                <img
+                  width={40}
+                  src={country1.flags.png}
+                  alt={`the flags of ${country1.name.common}`}
+                />
+                <h2>{country1.name.common}</h2>
+              </div>
+            </TableCell>
+            <TableCell sx={head}>
+              <div className="flex gap-5">
+                <img
+                  width={40}
+                  src={country2.flags.png}
+                  alt={`the flags of ${country2.name.common}`}
+                />
+                <h2>{country2.name.common}</h2>
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell sx={head}>Code</TableCell>
+            <TableCell>{country1.cca2}</TableCell>
+            <TableCell>{country2.cca2}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={head}>Population</TableCell>
+            <TableCell>
+              {country1.population > country2.population ? (
+                <div className="flex gap-3">
+                  <i className="fa-solid fa-circle-check text-[#126e52]"></i>
+                  <p>{`${formatPopulation(country1.population)}`}</p>
+                </div>
+              ) : (
+                <p>{`${formatPopulation(country1.population)}`}</p>
+              )}
+            </TableCell>
+            <TableCell>
+              {country2.population > country1.population ? (
+                <div className="flex gap-3">
+                  <i className="fa-solid fa-circle-check text-[#126e52]"></i>
+                  <p>{`${formatPopulation(country2.population)}`}</p>
+                </div>
+              ) : (
+                <p>{`${formatPopulation(country2.population)}`}</p>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={head}>area</TableCell>
+            <TableCell>
+              {country1.area > country2.area ? (
+                <div className="flex gap-3">
+                  <i className="fa-solid fa-circle-check text-[#126e52]"></i>
+                  <p>{`${formatArea(country1.area)} km²`}</p>
+                </div>
+              ) : (
+                <p>{`${formatArea(country1.area)} km²`}</p>
+              )}
+            </TableCell>
+            <TableCell>
+              {country2.area > country1.area ? (
+                <div className="flex gap-3">
+                  <i className="fa-solid fa-circle-check text-[#126e52]"></i>
+                  <p>{`${formatArea(country2.area)} km²`}</p>
+                </div>
+              ) : (
+                <p>{`${formatArea(country2.area)} km²`}</p>
+              )}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={head}>Region</TableCell>
+            <TableCell>{country1.region}</TableCell>
+            <TableCell>{country2.region}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
-};
-
-export default CountryCompareResult;
+}

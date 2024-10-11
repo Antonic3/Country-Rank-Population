@@ -3,6 +3,7 @@ import MainLayout from "./MainLayout";
 import Home from "../pages/Home";
 import Compare from "../pages/Compare";
 import News from "../pages/News";
+import CompareForm from "../components/CountryComparisonForm";
 
 export const router = createBrowserRouter([
   {
@@ -14,8 +15,14 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/compare/*",
-        element: <Compare />,
+        path: "compare",
+        element: <CompareForm />,
+        children: [
+          {
+            path: ":code1/n/:code2",
+            element: <Compare />,
+          },
+        ],
       },
       {
         path: "/news",

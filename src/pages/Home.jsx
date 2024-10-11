@@ -37,23 +37,35 @@ function Home() {
                   <th className="px-4 py-2 text-left">Country</th>
                   <th className="px-4 py-2 text-left">Code</th>
                   <th className="px-4 py-2 text-left">Population</th>
+                  <th className="px-4 py-2 text-left">Flag</th>
+                  <th className="px-4 py-2 text-left">Area (km²)</th>
                 </tr>
               </thead>
               <tbody>
-                {countries.slice(0, 200).map((country, index) => (
-                  <tr
-                    key={country.cca2}
-                    className={`${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
-                    } hover:bg-blue-100 transition duration-200 ease-in-out`}
-                  >
-                    <td className="border px-4 py-2">{index + 1}</td>
-                    <td className="border px-4 py-2">{country.name.common}</td>
-                    <td className="border px-4 py-2">{country.cca2}</td>
-                    <td className="border px-4 py-2">{formatPopulation(country.population)}</td>
-                  </tr>
-                ))}
-              </tbody>
+    {countries.slice(0, 200).map((country, index) => (
+      <tr
+        key={country.cca2}
+        className={`${
+          index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
+        } hover:bg-blue-100 transition duration-200 ease-in-out`}
+      >
+        <td className="border px-4 py-2">{index + 1}</td>
+        <td className="border px-4 py-2">{country.name.common}</td>
+        <td className="border px-4 py-2">{country.cca2}</td>
+        <td className="border px-4 py-2">{formatPopulation(country.population)}</td>
+        <td className="border px-4 py-2">
+          <img
+            src={country.flags.svg}
+            alt={country.name.common}
+            className="max-w-[30px] h-auto" // add this class
+          />
+        </td>
+        <td className="border px-4 py-2">
+          {country.area.toLocaleString()} km²
+        </td>
+      </tr>
+    ))}
+  </tbody>
             </table>
           </div>
         </div>
